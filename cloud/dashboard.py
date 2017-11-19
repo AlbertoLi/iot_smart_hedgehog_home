@@ -14,8 +14,8 @@ import logging.handlers
 from credentials import AWS_KEY, AWS_SECRET, REGION
 
 
-dynamodb = boto3.resource('dynamodb', aws_access_key_id=AWS_ACCESS_KEY,
-                            aws_secret_access_key=AWS_SECRET_KEY,
+dynamodb = boto3.resource('dynamodb', aws_access_key_id=AWS_KEY,
+                            aws_secret_access_key=AWS_SECRET,
                             region_name=REGION)
 
 table = dynamodb.Table('SensorData')
@@ -58,18 +58,18 @@ def get_Data():
         items = response['Items']
         if len(items) > 0:
             averagecount+=1
-            runningaverages["speed"]+=int(items[0]["speed"])
-            runningaverages["temperature"]+=int(items[0]["temperature"])
-            runningaverages["rpm"]+=int(items[0]["rpm"])
+            print(str(items[0]["Speed"]) + "\n")
+            runningaverages["speed"]+=int(items[0]["Speed"])
+            runningaverages["temperature"]+=int(items[0]["Temperature"])
+            runningaverages["rpm"]+=int(items[0]["RPM"])
             data["Timestamp"] = str(items[0]["Timestamp"])
-            data["temperature"] = int(items[0]["temperature"])
-            data["speed"] = int(items[0]["speed"])
-            data["rpm"] = int(items[0]["rpm"])
-            data["co2avg"] = float(averages["co2"])
+            data["temperature"] = int(items[0]["Temperature"])
+            data["speed"] = int(items[0]["Speed"])
+            data["rpm"] = int(items[0]["RPM"])
             data["temperatureavg"] = float(averages["temperature"])
             data["speedaverage"] = float(averages["speed"])
             data["rpmaverage"] = float(averages["rpm"])
-            logger.info(json.dumps(data))
+            print(data)
             return jsonify(json.dumps(data))
 
         else:

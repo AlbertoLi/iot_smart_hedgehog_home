@@ -67,6 +67,12 @@
                 </form>
             </div>
         </div>
+        <div class="wrapper">
+            <div class="box">
+                <img src="https://s3.us-east-2.amazonaws.com/testerbucketbsc/pygmy_hedgehogs_test.jpg" alt="Hedgehog" style="width:300px;height:200px">
+            </div>
+        </div>
+          
         <div class="container">
         </div>
         <script src="{{ url_for('static', filename='raphael-2.1.4.min.js') }}"></script>
@@ -77,8 +83,8 @@
               var g1 = new JustGage({
                 id: 'g1',
                 value: 0,
-                min: 60,
-                max: 90,
+                min: 0,
+                max: 100,
                 pointer: true,
                 pointerOptions: {
                   toplength: -15,
