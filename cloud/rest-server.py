@@ -2,7 +2,7 @@
 from __future__ import print_function
 from flask import Flask, jsonify, abort, request, make_response, url_for
 from flask import render_template, redirect
-from awscredentials import ACCESS_KEY, SECRET_KEY, REGION
+import credentials
 from random import randint
 import boto3
 import string
