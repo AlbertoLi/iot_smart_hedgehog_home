@@ -12,6 +12,14 @@ import os
 import logging
 import logging.handlers
 
+APP = flask.Flask(__name__)
+statisticstimestamp=""
+averages={"co2":0,"temperature":0,"light":0,"humidity":0}
+averagecount=0
+runningaverages={"co2":0,"temperature":0,"light":0,"humidity":0}
+
+
+
 @APP.route('/data')
 def get_Data():
     global statisticstimestamp
