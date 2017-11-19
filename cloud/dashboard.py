@@ -12,6 +12,16 @@ import os
 import logging
 import logging.handlers
 
+AWS_ACCESS_KEY="AKIAJ5K42O4X7PNSVQHA" 
+AWS_SECRET_KEY="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"
+REGION="us-east-2"
+
+dynamodb = boto3.resource('dynamodb', aws_access_key_id=AWS_ACCESS_KEY,
+                            aws_secret_access_key=AWS_SECRET_KEY,
+                            region_name=REGION)
+
+table = dynamodb.Table('SensorData')
+
 APP = flask.Flask(__name__)
 statisticstimestamp=""
 averages={"temperature":0,"speed":0,'rpm':0}
@@ -48,7 +58,7 @@ def get_Data():
             averagecount=0
             print(averages)
         items = response['Items']
-            if len(items) > 0:
+        if len(items) > 0:
             averagecount+=1
             runningaverages["speed"]+=int(items[0]["speed"])
             runningaverages["temperature"]+=int(items[0]["temperature"])
@@ -74,13 +84,18 @@ def get_Data():
             
     return jsonify({'temperature': 0, 'speed': 0,'rpm':0})
 
-@app.route('/', methods=['GET', 'POST'])
+@APP.route('/', methods=['GET'])
 def home_page():
-    if request.method == 'POST':
-        return redirect('/submission')
-    else:
-        return render_template('dashboard.html',avs=averages)
-        
-@app.route('/submission', methods=['GET'])
-def submission_page():
-    return render_tempplate('submission.html')
+    return render_template('dashboard.html',avs=averages)
+
+@APP.route('/musicsubmission', methods=['GET'])
+def musicsubmission_page():
+    return render_template('musicsubmission.html')
+
+@APP.route('/snacksubmission', methods=['GET'])
+def snacksubmission_page():
+    return render_template('snacksubmission.html')
+
+if __name__ == '__main__':
+    APP.debug=True
+    APP.run(host='0.0.0.0', port=5000)
