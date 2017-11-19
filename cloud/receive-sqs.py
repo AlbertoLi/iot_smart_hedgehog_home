@@ -1,39 +1,37 @@
-from awscredentials import ACCESS_KEY, SECRET_KEY, REGION
 import boto3
 import time
 import json
+from credentials import AWS_KEY, AWS_SECRET, REGION
 
-sqs = boto3.resource('sqs', aws_access_key_id=ACCESS_KEY,
-                            aws_secret_access_key=SECRET_KEY,
+sqs = boto3.resource('sqs', aws_access_key_id=AWS_KEY,
+                            aws_secret_access_key=AWS_SECRET,
                             region_name=REGION)
                             
 # Get the queue
-queue = sqs.get_queue_by_name(QueueName='TestA')
+queue = sqs.get_queue_by_name(QueueName='SensorData')
 
 
 # Get the table
-dynamodb = boto3.resource('dynamodb', aws_access_key_id=ACCESS_KEY,
-                            aws_secret_access_key=SECRET_KEY,
+dynamodb = boto3.resource('dynamodb', aws_access_key_id=AWS_KEY,
+                            aws_secret_access_key=AWS_SECRET,
                             region_name=REGION)
+#Service Resource
+s3 = boto3.client('s3', aws_access_key_id=AWS_KEY,
+                        aws_secret_access_key=AWS_SECRET)
 
-Students = dynamodb.Table('Students');
-Courses = dynamodb.Table('Courses');
-Takes = dynamodb.Table('Takes');
-Grades = dynamodb.Table('Grades');
+# Get the queue
+queue = sqs.get_queue_by_name(QueueName='SensorData')
+table = dynamodb.Table('SensorData') #Load Table
 
 def writeToDynamoDB(data):
-    if data['table'] == 'Students':
-        print('Students')
-        Students.put_item(Item=data)
-    elif data['table'] == 'Courses':
-        print('Courses')
-        Courses.put_item(Item=data)
-    elif data['table'] == 'Grades':
-        print('Grades')
-        Grades.put_item(Item=data)
-    else:
-        print('Takes')
-        Takes.put_item(Item=data)
+    table.put_item(
+       Item={
+                "Timestamp": data['timestamp'],
+                "Temperature": data['temperature'],
+                "Speed": data['speed'],
+                "RPM": data['rpm'],
+            }
+        )
 
 while True:
     for message in queue.receive_messages(MaxNumberOfMessages=1):
@@ -42,5 +40,3 @@ while True:
         writeToDynamoDB(json.loads(message.body))
         message.delete()
     	time.sleep(1)
-
-
