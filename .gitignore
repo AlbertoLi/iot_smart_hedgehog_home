@@ -3,3 +3,4 @@ credentials.py
 /cloud/credentials.py
 .DS_Store
 .gitignore_swp
+credentials*
