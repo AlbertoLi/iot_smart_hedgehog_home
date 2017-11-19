@@ -39,4 +39,4 @@ while True:
         print message.body
         writeToDynamoDB(json.loads(message.body))
         message.delete()
-    	time.sleep(1)
+    	time.sleep(0.7)
