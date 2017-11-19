@@ -11,10 +11,8 @@ import sys
 import os
 import logging
 import logging.handlers
+from credentials import AWS_KEY, AWS_SECRET, REGION
 
-AWS_ACCESS_KEY="AKIAJ5K42O4X7PNSVQHA" 
-AWS_SECRET_KEY="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"
-REGION="us-east-2"
 
 dynamodb = boto3.resource('dynamodb', aws_access_key_id=AWS_ACCESS_KEY,
                             aws_secret_access_key=AWS_SECRET_KEY,
