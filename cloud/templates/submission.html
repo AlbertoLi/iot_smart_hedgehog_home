@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Hedgehog Smart Home</title>
+        <meta name="viewport" content="width=device-width">
+        <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+    </head>
+    <body>
+        <center>
+            <h1>Thank you for your button click!</h1>
+            <h1>This will automatically redirect in 3 seconds. </h1>
+            <h1><a href="/">If not, Click Here</a></h1>
+        </center>
+        <script>
+        var timer = setTimeout(function() {
+            window.location='/'
+        }, 3000);
+    </script>
+    </body>
+</html>

@@ -67,8 +67,20 @@ def get_Data():
         else:
             return jsonify({'temperature': 0, 'speed': 0,'rpm':0})
 
+
     except Exception as err:
         print("Unexpected error:", err)
         pass
             
     return jsonify({'temperature': 0, 'speed': 0,'rpm':0})
+
+@app.route('/', methods=['GET', 'POST'])
+def home_page():
+    if request.method == 'POST':
+        return redirect('/submission')
+    else:
+        return render_template('dashboard.html',avs=averages)
+        
+@app.route('/submission', methods=['GET'])
+def submission_page():
+    return render_tempplate('submission.html')
