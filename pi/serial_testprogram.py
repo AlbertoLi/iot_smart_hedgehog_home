@@ -11,7 +11,7 @@ queue = sqs.get_queue_by_name(QueueName='PiQueue')
 # configure the serial connections (the parameters differs on the device you are connecting to)
 # Get the queue
 ser = serial.Serial(
-    port='/dev/ttyUSB1',
+    port='/dev/ttyAMC0',
     baudrate=9600,
     parity=serial.PARITY_ODD,
     stopbits=serial.STOPBITS_TWO,
