@@ -31,7 +31,8 @@ averages={"temperature":0,"speed":0,'rpm':0}
 averagecount=0
 runningaverages={"temperature":0,"speed":0,"rpm":0}
 
-
+def publish(data):
+    queue.send_message(MessageBody=json.dumps(data))
 
 @APP.route('/data')
 def get_Data():
@@ -107,5 +108,3 @@ if __name__ == '__main__':
     APP.debug=True
     APP.run(host='0.0.0.0', port=5000)
 
-def publish(data):
-    queue.send_message(MessageBody=json.dumps(data))
