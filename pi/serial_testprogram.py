@@ -7,7 +7,7 @@ sqs = boto3.resource('sqs', aws_access_key_id=AWS_KEY,
                             aws_secret_access_key=AWS_SECRET,
                             region_name=REGION)
 queue = sqs.get_queue_by_name(QueueName='PiQueue')
-                            
+out= ""                            
 # configure the serial connections (the parameters differs on the device you are connecting to)
 # Get the queue
 ser = serial.Serial(
