@@ -1,51 +1,69 @@
 #include "mbed.h"
 #include "Servo.h"
 #include "rtos.h"
+#include "SDFileSystem.h"
+#include "wave_player.h"
 RawSerial  pi(USBTX, USBRX);
 Mutex serial_mutex;
 
 Servo myservo(p21);
 AnalogIn LM61(p15);
 
+SDFileSystem sd(p5, p6, p7, p8, "sd"); // the pinout on the mbed Cool Components workshop board
+AnalogOut DACout(p18);
+//On Board Speaker
+//PwmOut PWMout(p25);
+wave_player waver(&DACout);
 
 volatile float temp_out;
 volatile float rpm_out;
 volatile float wheel_speed_out;
+volatile int treat=0;
+volatile int music=0;
 
 DigitalOut myled1(LED1);
-DigitalOut myled2(LED2);
 
 volatile long int count;
 
 Serial pc(USBTX, USBRX);
 Timer t;
-InterruptIn risingEdge(p5);
+InterruptIn risingEdge(p11);
 
+void dev_recv()
+{
+    char temp = 0;
+    myled1 = !myled1;
+    while(pi.readable()) {
+        temp = pi.getc();
+        if (temp=='t') treat=1;
+        if (temp=='m') music=1;
+    }
+}
 
 void check_temp() {
     float tempC, tempF;
-
     while(1) {
         //conversion to degrees C - from sensor output voltage per LM61 data sheet
         tempC = ((LM61*3.3)-0.600)*100.0;
         //convert to degrees F
         tempF = (9.0*tempC)/5.0 + 32.0;
-        temp_out = tempF;
+        temp_out = tempF+16.7;
         //print current temp
-        printf("%5.2F C %5.2F F \n\r", tempC, tempF + 16.7);
         Thread::wait(500);
     }    
 }
 
 void deliver_snack()
 {
-    myservo = 1; //closed position
-    Thread::wait(1000);
-    myservo = .7; //open position
-    Thread::wait(200); // open for .2 secs delivers half a small tupperware
-    myservo = 1;
-
-    Thread::wait(500);    
+    if(treat=1){
+        myservo = 1; //closed position
+        Thread::wait(1000);
+        myservo = .7; //open position
+        Thread::wait(200); // open for .2 secs delivers half a small tupperware
+        myservo = 1;
+        Thread::wait(500);
+        treat=0;
+    }    
 }
 
 
@@ -53,11 +71,9 @@ void deliver_snack()
 
 char* getOut()
 {
-    char output[100];
+    char output[22];
 
-    snprintf(output, 100, "%f,%f,%f", temp_out, rpm_out, wheel_speed_out);
-
-//    printf("%s", output);
+    snprintf(output, 22, "%f3.1, %f4.0, %f1.5", temp_out, rpm_out, wheel_speed_out);
     return output;
 }
 
@@ -65,36 +81,11 @@ void send_data() {
     while(1)
     {
         pi.puts(getOut());
-        Thread::wait(1000);
+        Thread::wait(5000);
     }
-}
- 
-void send_data()
-{
-    while(pi.readable()) 
-    {
-        char command = pi.getc();
-        switch(command){
-            case 'k':
-                //drop a snack
-                deliver_snack();
-            case 'g':
-                //play a song
-                
-            case 'a':
-                //start data stream (mbed to pi)
-                Thread t4(send_data);
-        }
-    }    
 }
 
 void pulses() {
-    if (myled2 == 1) {
-        myled2 = 0;
-    }
-    else {
-        myled2 = 1;
-    }
     count++;
 }
 
@@ -109,30 +100,33 @@ void check_wheel() {
         }
         t.stop();
         long int temp = count;
-        pc.printf("Count: %d", temp);
         double circumference = 0.06 * 3.1416; // 6 cm wheel diameter * pi 
         double rev = (double)temp;
         double rpm = rev * 60;
         double speed = circumference * rev;
         rpm_out = (float) rpm;
         wheel_speed_out = (float) speed;
-//        pc.printf(" %0.2f// RPM", rpm);
-//        pc.printf(" speed: %f m/s", speed);
-//        pc.putc(0xA);
-//        pc.putc(0xD);
     }
 }
 
 
 int main() {
+    //printf("Hello, in Main");
     Thread t1(check_temp);
     Thread t2(send_data);
     Thread t3(check_wheel);
     
     pi.baud(9600);
-    pi.attach(&pi_interface, Serial::RxIrq);
+    pi.attach(&dev_recv, Serial::RxIrq);
     
     while (1) {
-        Thread::wait(10000000);
+        if(music==1) {
+            FILE *wave_file = fopen("/sd/wavfiles/crickets.wav", "r");
+            waver.play(wave_file);
+            fclose(wave_file);
+            Thread::wait(1000);
+            music=0;
+        }
     }   
 }
+

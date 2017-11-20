@@ -41,7 +41,7 @@ while 1 :
 
         if input == None:
             while ser.inWaiting() > 0:
-                out += ser.read(100)
+                out += ser.read(20)
 
             if out != '':
                 print ">>" + out
@@ -53,13 +53,13 @@ while 1 :
             # let's wait one second before reading output (let's give device time to answer)
             time.sleep(1)
             while ser.inWaiting() > 0:
-                out += ser.read(100)
+                out += ser.read(20)
 
             if out != '':
                 print ">>" + out
     if input == None:
             while ser.inWaiting() > 0:
-                out += ser.read(100)
+                out += ser.read(20)
 
             if out != '':
                 print ">>" + out
