@@ -1,6 +1,7 @@
 import boto3
 import time
 from credentials import AWS_KEY, AWS_SECRET, REGION
+import subprocess
 
 BUCKET = "iot-smart-hedgehog-home-bucket"
 
