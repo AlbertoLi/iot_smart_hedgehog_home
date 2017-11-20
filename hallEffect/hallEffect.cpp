@@ -1,8 +1,9 @@
 #include "mbed.h"
+#include "rtos.h"
 
 Serial pc(USBTX, USBRX);
 Timer t;
-InterruptIn risingEdge(p5);
+InterruptIn risingEdge(p11);
 
 DigitalOut myled(LED1);
 DigitalOut myled2(LED2);
@@ -25,9 +26,10 @@ int main() {
 		t.reset();
 		t.start();
 		count = 0;
-		while (t.read_ms() < 1001) {
-			;
-		}
+		//while(t.read_ms() < 1001) {
+		//            ;
+		//        }   
+		Thread::wait(1000);
 		t.stop();
 		long int temp = count;
 		pc.printf("Count: %d", temp);
