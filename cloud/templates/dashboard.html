@@ -42,6 +42,17 @@
             }
         </style>
         <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+        <script>
+            window.onload = function() {
+                var image = document.getElementById("img");
+
+                function updateImage() {
+                    image.src = image.src.split("?")[0] + "?" + new Date().getTime();
+                }
+
+                setInterval(updateImage, 1000);
+            }
+        </script>
     </head>
     <body>
         <center>
@@ -69,7 +80,7 @@
         </div>
         <div class="wrapper">
             <div class="box">
-                <img src="https://s3.us-east-2.amazonaws.com/iot-smart-hedgehog-home-bucket/pygmy_hedgehogs_test.jpg" alt="Hedgehog" style="width:300px;height:200px">
+                <img id="img" src="https://s3.us-east-2.amazonaws.com/iot-smart-hedgehog-home-bucket/pygmy_hedgehogs_test.jpg" alt="Hedgehog" style="width:300px;height:200px">
             </div>
         </div>
           
