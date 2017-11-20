@@ -7,19 +7,12 @@ sqs = boto3.resource('sqs', aws_access_key_id=AWS_KEY,
                             aws_secret_access_key=AWS_SECRET,
                             region_name=REGION)
                             
-# Get the queue
-queue = sqs.get_queue_by_name(QueueName='SensorData')
-
-
 # Get the table
 dynamodb = boto3.resource('dynamodb', aws_access_key_id=AWS_KEY,
                             aws_secret_access_key=AWS_SECRET,
                             region_name=REGION)
-#Service Resource
-s3 = boto3.client('s3', aws_access_key_id=AWS_KEY,
-                        aws_secret_access_key=AWS_SECRET)
 
-# Get the queue
+# Get the queue and table handler
 queue = sqs.get_queue_by_name(QueueName='SensorData')
 table = dynamodb.Table('SensorData') #Load Table
 
