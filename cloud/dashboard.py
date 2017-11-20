@@ -20,6 +20,11 @@ dynamodb = boto3.resource('dynamodb', aws_access_key_id=AWS_KEY,
 
 table = dynamodb.Table('SensorData')
 
+sqs = boto3.resource('sqs', aws_access_key_id=AWS_KEY,
+                            aws_secret_access_key=AWS_SECRET,
+                            region_name=REGION)
+queue = sqs.get_queue_by_name(QueueName='PiQueue')
+
 APP = flask.Flask(__name__)
 statisticstimestamp=""
 averages={"temperature":0,"speed":0,'rpm':0}
@@ -88,12 +93,19 @@ def home_page():
 
 @APP.route('/musicsubmission', methods=['GET'])
 def musicsubmission_page():
+    data={"Music":True}
+    publish(data)
     return render_template('musicsubmission.html')
 
 @APP.route('/snacksubmission', methods=['GET'])
 def snacksubmission_page():
+    data={"Snack":True}
+    publish(data)
     return render_template('snacksubmission.html')
 
 if __name__ == '__main__':
     APP.debug=True
     APP.run(host='0.0.0.0', port=5000)
+
+def publish(data):
+    queue.send_message(MessageBody=json.dumps(data))
