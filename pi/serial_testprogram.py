@@ -26,10 +26,13 @@ while 1 :
         print message.body
         ######## Add code here to send thru serial. Use 'data' variable which is in json form ########
         if (data[0] == "Music"):
+            print("sending m on serial \n")
             ser.write("m")
         elif (data[0] == "Snack"):
+            print("sending t on serial \n")
             ser.write("t")
         else:
+            print("input is NONE \n")
             input = None
 
         ######## Add code here to send thru serial. Use 'data' variable which is in json form ########
