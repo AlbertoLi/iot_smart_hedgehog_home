@@ -64,7 +64,7 @@ while 1 :
                        Item={
                                 "Timestamp": timestamp,
                                 "Temperature": Decimal(temp),
-                                "Speed": Decimal(speed,)
+                                "Speed": Decimal(speed),
                                 "RPM": Decimal(rpm)
                             }
                         )
