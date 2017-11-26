@@ -2,6 +2,7 @@ import time
 import serial
 import boto3
 from credentials import AWS_KEY, AWS_SECRET, REGION
+from flask import json
 
 sqs = boto3.resource('sqs', aws_access_key_id=AWS_KEY,
                             aws_secret_access_key=AWS_SECRET,
@@ -45,6 +46,17 @@ while 1 :
 
             if out != '':
                 print ">>" + out
-    out=''
-
+    temp,speed,rpm = out.split(",")
+    if temp == 0:
+        #Do nothing
+    else:
+        table.put_item(
+           Item={
+                    "Temperature": temp,
+                    "Speed": speed,
+                    "RPM": rpm,
+                }
+            )
+        print "Pushed " + temp + " " + speed + " " + rpm
+        out=''
 
