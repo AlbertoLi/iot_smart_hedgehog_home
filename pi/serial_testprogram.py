@@ -12,10 +12,7 @@ out= ""
 # Get the queue
 ser = serial.Serial(
     port='/dev/ttyACM0',
-    baudrate=9600,
-    parity=serial.PARITY_NONE,
-    stopbits=serial.STOPBITS_ONE,
-    bytesize=serial.EIGHTBITS
+    baudrate=9600
 )
 
 ser.isOpen()
@@ -29,34 +26,15 @@ while 1 :
         print message.body
         ######## Add code here to send thru serial. Use 'data' variable which is in json form ########
         if (data[0] == "Music"):
-            input = "m"
+            ser.write("m")
         elif (data[0] == "Snack"):
-            input = "t"
+            ser.write("t")
         else:
             input = None
 
         ######## Add code here to send thru serial. Use 'data' variable which is in json form ########
         message.delete()
         time.sleep(0.7)
-
-        if input == None:
-            while ser.inWaiting() > 0:
-                out += ser.read(size=22)
-
-            if out != '':
-                print ">>" + out
-        else:
-            # send the character to the device
-            # (note that I happend a \r\n carriage return and line feed to the characters - this is requested by my device)
-            ser.write(input)
-            out = ''
-            # let's wait one second before reading output (let's give device time to answer)
-            time.sleep(1)
-            while ser.inWaiting() > 0:
-                out += ser.read(size=22)
-
-            if out != '':
-                print ">>" + out
     if input == None:
             while ser.inWaiting() > 0:
                 out += ser.read(size=22)
