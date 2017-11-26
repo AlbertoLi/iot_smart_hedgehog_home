@@ -4,10 +4,17 @@ import boto3
 from credentials import AWS_KEY, AWS_SECRET, REGION
 from flask import json
 
+#Get the queue
 sqs = boto3.resource('sqs', aws_access_key_id=AWS_KEY,
                             aws_secret_access_key=AWS_SECRET,
                             region_name=REGION)
 queue = sqs.get_queue_by_name(QueueName='PiQueue')
+# Get the table
+dynamodb = boto3.resource('dynamodb', aws_access_key_id=AWS_KEY,
+                            aws_secret_access_key=AWS_SECRET,
+                            region_name=REGION)
+table = dynamodb.Table('SensorData') #Load Table
+
 out= ""                            
 # configure the serial connections (the parameters differs on the device you are connecting to)
 # Get the queue
@@ -57,6 +64,6 @@ while 1 :
                     "RPM": rpm,
                 }
             )
-        print "Pushed " + temp + " " + speed + " " + rpm
+        print "Pushed {Temperature: " + temp + " Speed: " + speed + " RPM: " + rpm + "} to Dynamodb"
         out=''
 
