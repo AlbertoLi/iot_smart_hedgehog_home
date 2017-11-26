@@ -27,11 +27,13 @@ while 1 :
     for message in queue.receive_messages(MaxNumberOfMessages=1):
         data = message.body
         print message.body
+        message.delete()
         ######## Add code here to send thru serial. Use 'data' variable which is in json form ########
         if (data[0] == "Music"):
-            subprocess.call(["sudo", "sh","-c" ,"'echo","-n","\"m\"",">","/dev/ttyACM0"])
+            subprocess.call(["sudo ", "sh ","-c " ,"'echo ","-n ","\"m\" ","> ","/dev/ttyACM0'"])
         elif (data[0] == "Snack"):
-            subprocess.call(["sudo", "sh","-c" ,"'echo","-n","\"t\"",">","/dev/ttyACM0"])
+            subprocess.call(["sudo", "sh","-c" ,"'echo","-n","\"t\"",">","/dev/ttyACM0'"])
+
         
 
 
