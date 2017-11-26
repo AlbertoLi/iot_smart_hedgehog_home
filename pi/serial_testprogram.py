@@ -3,6 +3,8 @@ import serial
 import boto3
 from credentials import AWS_KEY, AWS_SECRET, REGION
 from flask import json
+import datetime
+from decimal import *
 
 #Get the queue
 sqs = boto3.resource('sqs', aws_access_key_id=AWS_KEY,
@@ -25,7 +27,8 @@ ser = serial.Serial(
 
 ser.isOpen()
 
-print 'Enter your commands below.\r\nInsert "exit" to leave the application.'
+# print 'Enter your commands below.\r\nInsert "exit" to leave the application.'
+print 'Starting pi application...'
 
 input=1
 while 1 :
@@ -60,11 +63,11 @@ while 1 :
                     table.put_item(
                        Item={
                                 "Timestamp": timestamp,
-                                "Temperature": temp,
-                                "Speed": speed,
-                                "RPM": rpm,
+                                "Temperature": Decimal(temp),
+                                "Speed": Decimal(speed,)
+                                "RPM": Decimal(rpm),
                             }
                         )
-                    print "Pushed {Temperature: " + temp + " Speed: " + speed + " RPM: " + rpm + "} to Dynamodb"
+                    print "Pushed {Timestamp: " + timestamp + " Temperature: " + temp + " Speed: " + speed + " RPM: " + rpm + "} to Dynamodb"
                 out=''
 
