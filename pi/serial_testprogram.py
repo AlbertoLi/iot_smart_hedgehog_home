@@ -53,17 +53,18 @@ while 1 :
 
             if out != '':
                 print ">>" + out
-    temp,speed,rpm = out.split(",")
-    if temp == 0:
-        #Do nothing
-    else:
-        table.put_item(
-           Item={
-                    "Temperature": temp,
-                    "Speed": speed,
-                    "RPM": rpm,
-                }
-            )
-        print "Pushed {Temperature: " + temp + " Speed: " + speed + " RPM: " + rpm + "} to Dynamodb"
-        out=''
+                temp,speed,rpm = out.split(",")
+                if temp != 0:
+                    ts=time.time()
+                    timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+                    table.put_item(
+                       Item={
+                                "Timestamp": timestamp,
+                                "Temperature": temp,
+                                "Speed": speed,
+                                "RPM": rpm,
+                            }
+                        )
+                    print "Pushed {Temperature: " + temp + " Speed: " + speed + " RPM: " + rpm + "} to Dynamodb"
+                out=''
 
