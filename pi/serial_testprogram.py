@@ -65,7 +65,7 @@ while 1 :
                                 "Timestamp": timestamp,
                                 "Temperature": Decimal(temp),
                                 "Speed": Decimal(speed,)
-                                "RPM": Decimal(rpm),
+                                "RPM": Decimal(rpm)
                             }
                         )
                     print "Pushed {Timestamp: " + timestamp + " Temperature: " + temp + " Speed: " + speed + " RPM: " + rpm + "} to Dynamodb"
