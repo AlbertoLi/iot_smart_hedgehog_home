@@ -40,9 +40,10 @@ while 1 :
         time.sleep(0.7)
     if input == None:
             while ser.inWaiting() > 0:
-                out += ser.read(size=22)
+                out += ser.read(size=21)
 
             if out != '':
                 print ">>" + out
+    out=''
 
 
