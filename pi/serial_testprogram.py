@@ -13,9 +13,9 @@ out= ""
 ser = serial.Serial(
     port='/dev/ttyACM0',
     baudrate=9600,
-    parity=serial.PARITY_ODD,
-    stopbits=serial.STOPBITS_TWO,
-    bytesize=serial.SEVENBITS
+    parity=serial.PARITY_NONE,
+    stopbits=serial.STOPBITS_ONE,
+    bytesize=serial.EIGHTBITS
 )
 
 ser.isOpen()
@@ -27,13 +27,41 @@ while 1 :
     for message in queue.receive_messages(MaxNumberOfMessages=1):
         data = message.body
         print message.body
-        message.delete()
         ######## Add code here to send thru serial. Use 'data' variable which is in json form ########
         if (data[0] == "Music"):
-            subprocess.call(["sudo ", "sh ","-c " ,"'echo ","-n ","\"m\" ","> ","/dev/ttyACM0'"])
+            input = "m"
         elif (data[0] == "Snack"):
-            subprocess.call(["sudo", "sh","-c" ,"'echo","-n","\"t\"",">","/dev/ttyACM0'"])
+            input = "t"
+        else:
+            input = None
 
-        
+        ######## Add code here to send thru serial. Use 'data' variable which is in json form ########
+        message.delete()
+        time.sleep(0.7)
+
+        if input == None:
+            while ser.inWaiting() > 0:
+                out += ser.read(22)
+
+            if out != '':
+                print ">>" + out
+        else:
+            # send the character to the device
+            # (note that I happend a \r\n carriage return and line feed to the characters - this is requested by my device)
+            ser.write(input + '\r\n')
+            out = ''
+            # let's wait one second before reading output (let's give device time to answer)
+            time.sleep(1)
+            while ser.inWaiting() > 0:
+                out += ser.read(22)
+
+            if out != '':
+                print ">>" + out
+    if input == None:
+            while ser.inWaiting() > 0:
+                out += ser.read(22)
+
+            if out != '':
+                print ">>" + out
 
 
