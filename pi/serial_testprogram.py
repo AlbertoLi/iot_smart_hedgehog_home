@@ -24,6 +24,7 @@ while 1 :
     for message in queue.receive_messages(MaxNumberOfMessages=1):
         data = message.body
         print message.body
+        print(data[2:7])
         ######## Add code here to send thru serial. Use 'data' variable which is in json form ########
         if (data[0] == "Music"):
             print("sending m on serial \n")
