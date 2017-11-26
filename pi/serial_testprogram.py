@@ -38,6 +38,7 @@ while 1 :
         ######## Add code here to send thru serial. Use 'data' variable which is in json form ########
         message.delete()
         time.sleep(0.7)
+    input=None
     if input == None:
             while ser.inWaiting() > 0:
                 out += ser.read(size=21)
