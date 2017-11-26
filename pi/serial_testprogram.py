@@ -29,9 +29,9 @@ while 1 :
         print message.body
         ######## Add code here to send thru serial. Use 'data' variable which is in json form ########
         if (data[0] == "Music"):
-            subprocess.call(["sudo echo","m >",  "/dev/ttyACM0"])
+            subprocess.call(["sudo", "sh","-c" ,"'echo","-n","\"m\"",">","/dev/ttyACM0"])
         elif (data[0] == "Snack"):
-            subprocess.call(["sudo echo", "t >", "/dev/ttyACM0"])
+            subprocess.call(["sudo", "sh","-c" ,"'echo","-n","\"t\"",">","/dev/ttyACM0"])
         
 
 
