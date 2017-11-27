@@ -66,16 +66,18 @@ void check_temp() {
 }
 
 void deliver_snack()
-{
-    if (treat == 1) {
-        myservo = 1; //closed position
-        Thread::wait(1000);
-        myservo = .7; //open position
-        Thread::wait(200); // open for .2 secs delivers half a small tupperware
-        myservo = 1;
-        Thread::wait(500);
-        treat = 0;
-        myled2=0;
+{   while(1){
+        if (treat == 1) {
+            myservo = 1; //closed position
+            Thread::wait(1000);
+            myservo = .7; //open position
+            Thread::wait(200); // open for .2 secs delivers half a small tupperware
+            myservo = 1;
+            Thread::wait(500);
+            treat = 0;
+            myled2=0;
+        }
+        Thread::yield();
     }
 }
 
@@ -135,6 +137,7 @@ int main() {
     Thread t2(send_data);
     Thread t3(check_wheel);
     Thread t4(dev_recv);
+    Thread t5(deliver_snack);
 
     while (1) {
         if (music == 1) {
