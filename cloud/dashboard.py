@@ -64,7 +64,7 @@ def get_Data():
         items = response['Items']
         if len(items) > 0:
             averagecount+=1
-            print(str(items[0]["Speed"]) + "\n")
+            #print(str(items[0]["Speed"]) + "\n")
             runningaverages["speed"]+=int(items[0]["Speed"])
             runningaverages["temperature"]+=int(items[0]["Temperature"])
             runningaverages["rpm"]+=int(items[0]["RPM"])

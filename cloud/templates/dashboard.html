@@ -58,7 +58,21 @@
         <center>
             <h1>Dashboard</h1>
         </center>
+        
         <div class="wrapper">
+          <center>
+                <img id="img" src="https://s3.us-east-2.amazonaws.com/iot-smart-hedgehog-home-bucket/pygmy_hedgehogs_test.jpg" alt="Hedgehog" style="width:300px;height:200px">
+            </center>
+            <center>
+                <form action="/musicsubmission" method="get">
+                  <button type="submit" id="btnsubmit" class="btn btn-default">Play a sound for the hedgehogs</button>
+                </form>
+                <form action="/snacksubmission" method="get">
+                  <button type="submit" id="btnsubmit" class="btn btn-default">Give the hedgehogs a snack</button>
+                </form>
+            <center>
+        </div>
+       <div class="wrapper">
             <div class="box">
                 <div id="g1" class="gauge"></div>
                 <center>Current Temperature (F)</center>
@@ -71,29 +85,21 @@
                 <div id="g3" class="gauge"></div>
                 <center>Current RPM </center>
             </div>
-        </div>
+        </div> 
         <div class="wrapper">
             <div class="box">
-                <form action="/musicsubmission" method="get">
-                  <button type="submit" id="btnsubmit" class="btn btn-default">Play a sound for the hedgehogs</button>
-                </form>
+                <div id="g4" class="gauge"></div>
+                <center>1 min avg Temperature (F)</center>
             </div>
-        </div>
-        <div class="wrapper">
             <div class="box">
-                <form action="/snacksubmission" method="get">
-                  <button type="submit" id="btnsubmit" class="btn btn-default">Give the hedgehogs a snack</button>
-                </form>
+                <div id="g5" class="gauge"></div>
+                <center>1 min avg Speed (m/s)</center>
             </div>
-        </div>
-        <div class="wrapper">
             <div class="box">
-                <img id="img" src="https://s3.us-east-2.amazonaws.com/iot-smart-hedgehog-home-bucket/pygmy_hedgehogs_test.jpg" alt="Hedgehog" style="width:300px;height:200px">
+                <div id="g6" class="gauge"></div>
+                <center>1 min avg RPM </center>
             </div>
-        </div>
-          
-        <div class="container">
-        </div>
+        </div> 
         <script src="{{ url_for('static', filename='raphael-2.1.4.min.js') }}"></script>
         <script src="{{ url_for('static', filename='justgage.js') }}"></script>
         <script>
@@ -134,6 +140,7 @@
                   stroke_linecap: 'round'
                 },
                 gaugeWidthScale: 0.6,
+                decimals: true,
                 counter: true
               });
             
@@ -155,6 +162,65 @@
                 gaugeWidthScale: 0.6,
                 counter: true
               });
+            var g4 = new JustGage({
+                id: 'g4',
+                value: 0,
+                min: 0,
+                max: 100,
+                pointer: true,
+                pointerOptions: {
+                  toplength: -15,
+                  bottomlength: 10,
+                  bottomwidth: 12,
+                  color: '#8e8e93',
+                  stroke: '#ffffff',
+                  stroke_width: 3,
+                  stroke_linecap: 'round'
+                },
+                gaugeWidthScale: 0.6,
+                decimals: true,
+                counter: true
+              });
+
+              var g5 = new JustGage({
+                id: 'g5',
+                value: 0,
+                min: 0,
+                max: 3,
+                pointer: true,
+                decimals: true,
+                pointerOptions: {
+                  toplength: -15,
+                  bottomlength: 10,
+                  bottomwidth: 12,
+                  color: '#8e8e93',
+                  stroke: '#ffffff',
+                  stroke_width: 3,
+                  stroke_linecap: 'round'
+                },
+                gaugeWidthScale: 0.6,
+                counter: true
+              });
+            
+            var g6 = new JustGage({
+                id: 'g6',
+                value: 0,
+                min: 0,
+                max: 210,
+                pointer: true,
+                pointerOptions: {
+                  toplength: -15,
+                  bottomlength: 10,
+                  bottomwidth: 12,
+                  color: '#8e8e93',
+                  stroke: '#ffffff',
+                  stroke_width: 3,
+                  stroke_linecap: 'round'
+                },
+                gaugeWidthScale: 0.6,
+                decimals: true,
+                counter: true
+              });
              
             setInterval(                                
             function()
@@ -165,6 +231,9 @@
                g1.refresh(data.temperature);
                g2.refresh(data.speed);
                g3.refresh(data.rpm);
+               g4.refresh(data.temperatureavg);
+               g5.refresh(data.speedaverage);
+               g6.refresh(data.rpmaverage);
               });
               },
             1000); 
