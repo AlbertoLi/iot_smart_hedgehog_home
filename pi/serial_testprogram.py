@@ -56,7 +56,7 @@ while 1 :
 
             if out != '':
                 print ">>" + out
-                temp,speed,rpm = out.split(",")
+                temp,rpm,speed = out.split(",")
                 if temp != 0:
                     ts=time.time()
                     timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
