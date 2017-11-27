@@ -31,14 +31,23 @@ Timer t;
 InterruptIn risingEdge(p11);
 
 void dev_recv()
-{
-	char temp = 0;
-	myled1 = !myled1;
-	while (pi.readable()) {
-		temp = pi.getc();
-		if (temp == 't') treat = 1;
-		if (temp == 'm') music = 1;
-	}
+{   while(1){
+        char temp = 0;
+        while(pi.readable()) {
+            myled3 = !myled3;
+            serial_mutex.lock();
+            temp = pi.getc();
+            if (temp=='t'){
+                myled2=1;
+                treat=1;
+            }
+            if (temp=='m'){
+                myled1=1;
+                music=1;
+            }
+            serial_mutex.unlock();
+        }
+    }
 }
 
 void check_temp() {
@@ -72,18 +81,21 @@ void deliver_snack()
 
 char* getOut()
 {
-	char output[22];
+    char output[22];
 
-	snprintf(output, 22, "%f3.1, %f4.0, %f1.5", temp_out, rpm_out, wheel_speed_out);
-	return output;
+    snprintf(output, 22, "%3.1f, %4.0f, %1.5f \n", temp_out, rpm_out, wheel_speed_out);
+    return output;
 }
 
 void send_data() {
-	while (1)
-	{
-		pi.puts(getOut());
-		Thread::wait(5000);
-	}
+    while(1)
+    {
+        serial_mutex.lock();
+        pi.puts(getOut());
+        serial_mutex.unlock();
+        Thread::wait(5000);
+        
+    }
 }
 
 void pulses() {
@@ -119,9 +131,7 @@ int main() {
 	Thread t1(check_temp);
 	Thread t2(send_data);
 	Thread t3(check_wheel);
-
-	pi.baud(9600);
-	pi.attach(&dev_recv, Serial::RxIrq);
+	Thread t4(dev_recv);
 
 	while (1) {
 		if (music == 1) {
