@@ -62,6 +62,10 @@
             <div class="box">
                 <div id="g1" class="gauge"></div>
                 <center>Current Temperature (F)</center>
+                <div id="g2" class="gauge"></div>
+                <center>Current Speed (m/s)</center>
+                <div id="g3" class="gauge"></div>
+                <center>Current RPM </center>
             </div>
         </div>
         <div class="wrapper">
@@ -109,7 +113,44 @@
                 gaugeWidthScale: 0.6,
                 counter: true
               });
+
+              var g2 = new JustGage({
+                id: 'g2',
+                value: 0,
+                min: 0,
+                max: 3,
+                pointer: true,
+                pointerOptions: {
+                  toplength: -15,
+                  bottomlength: 10,
+                  bottomwidth: 12,
+                  color: '#8e8e93',
+                  stroke: '#ffffff',
+                  stroke_width: 3,
+                  stroke_linecap: 'round'
+                },
+                gaugeWidthScale: 0.6,
+                counter: true
+              });
             
+            var g3 = new JustGage({
+                id: 'g3',
+                value: 0,
+                min: 0,
+                max: 210,
+                pointer: true,
+                pointerOptions: {
+                  toplength: -15,
+                  bottomlength: 10,
+                  bottomwidth: 12,
+                  color: '#8e8e93',
+                  stroke: '#ffffff',
+                  stroke_width: 3,
+                  stroke_linecap: 'round'
+                },
+                gaugeWidthScale: 0.6,
+                counter: true
+              });
              
             setInterval(                                
             function()
@@ -118,6 +159,8 @@
                data=JSON.parse(data);
                console.log(data);
                g1.refresh(data.temperature);
+               g2.refresh(data.speed);
+               g3.refresh(data.rpm);
               });
               },
             1000); 

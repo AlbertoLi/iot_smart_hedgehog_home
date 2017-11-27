@@ -11,7 +11,6 @@ import sys
 import os
 import logging
 import logging.handlers
-from decimal import * 
 from credentials import AWS_KEY, AWS_SECRET, REGION
 
 
@@ -72,7 +71,7 @@ def get_Data():
             data["Timestamp"] = str(items[0]["Timestamp"])
             data["temperature"] = int(items[0]["Temperature"])
             data["speed"] = int(items[0]["Speed"])
-            data["rpm"] = Decimal(items[0]["RPM"])
+            data["rpm"] = float(items[0]["RPM"])
             data["temperatureavg"] = float(averages["temperature"])
             data["speedaverage"] = float(averages["speed"])
             data["rpmaverage"] = float(averages["rpm"])
