@@ -1,5 +1,5 @@
 # IoT Smart Hedgehog Home
-### Check out our Mbed Notebook Site with some demo videos!
+### Check out our Mbed Notebook Site for more details and demo videos!
 https://os.mbed.com/users/albertoli/notebook/iot_smart_hedgehog_home/
 
 ### Brief Description
